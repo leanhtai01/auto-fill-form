@@ -105,7 +105,7 @@ public class Form {
     }
 
     public WebElement findAnswerPositionInForm(WebElement questionAndAnswersElement, String answer) {
-        String pathToAnswerElements = ".//div[@class=\"office-form-question-choice\"]//input[@type=\"radio\"]";
+        String pathToAnswerElements = ".//div[@class=\"office-form-question-choice\"]//input";
         List<WebElement> answerElements = questionAndAnswersElement
                 .findElements(By.xpath(pathToAnswerElements));
 
@@ -123,6 +123,20 @@ public class Form {
             var answerElement = findAnswerPositionInForm(findQuestionPositionInForm(singleChoiceQuestion.getQuestion()),
                     singleChoiceQuestion.getCurrentAnswer());
             answerElement.click();
+        }
+
+        var multiChoiceQuestion = new MultiChoiceQuestion(
+                "Timesheet procedures: Which of the following actions are correct?");
+        multiChoiceQuestion.addAnswer("Enter timesheet every day");
+        multiChoiceQuestion.addAnswer("Input working time exactly as I worked");
+        multiChoiceQuestion.addAnswer("Submit timesheet before 12:00 PM Friday");
+
+        for (var answer : multiChoiceQuestion.getAnswers()) {
+            var answerElement = findAnswerPositionInForm(findQuestionPositionInForm(multiChoiceQuestion.getQuestion()),
+                    answer);
+            if (!answerElement.isSelected()) {
+                answerElement.click();
+            }
         }
     }
 }
