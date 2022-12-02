@@ -12,6 +12,18 @@ public class SingleChoiceQuestion implements Serializable {
     public SingleChoiceQuestion(String question, List<String> candidateAnswers) {
         this.question = question;
         this.candidateAnswers = candidateAnswers;
+        chooseRandomAnswer();
+    }
+
+    public void chooseRandomAnswer() {
+        if (!candidateAnswers.isEmpty()) {
+            previousAnswer = currentAnswer;
+            currentAnswer = candidateAnswers.remove(0);
+        }
+    }
+
+    public boolean isSolved() {
+        return candidateAnswers.isEmpty();
     }
 
     public String getQuestion() {
@@ -51,8 +63,16 @@ public class SingleChoiceQuestion implements Serializable {
         StringBuilder builder = new StringBuilder();
 
         builder.append(question);
-        for (String answer : candidateAnswers) {
-            builder.append("\n* " + answer);
+
+        if (!isSolved()) {
+            for (String answer : candidateAnswers) {
+                builder.append("\n* " + answer);
+            }
+
+            builder.append("\nPrevious answer: " + previousAnswer);
+            builder.append("\nCurrent answer: " + currentAnswer);
+        } else {
+            builder.append("The answer is: " + currentAnswer);
         }
 
         return builder.toString();
