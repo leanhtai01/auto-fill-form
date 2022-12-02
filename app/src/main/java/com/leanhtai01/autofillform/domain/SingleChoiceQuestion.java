@@ -72,7 +72,7 @@ public class SingleChoiceQuestion implements Serializable {
             builder.append("\nPrevious answer: " + previousAnswer);
             builder.append("\nCurrent answer: " + currentAnswer);
         } else {
-            builder.append("The answer is: " + currentAnswer);
+            builder.append("\nThe answer is: " + currentAnswer);
         }
 
         return builder.toString();

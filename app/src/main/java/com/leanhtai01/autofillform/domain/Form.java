@@ -29,18 +29,45 @@ public class Form {
 
         try {
             readQuizFromFile();
+            findAnswer();
         } catch (Exception e) {
             getQuizFromForm();
             fillForm();
-        }
 
-        askForScore();
-        writeQuizToFile();
+            System.console().printf("Enter final score: ");
+            quiz.setScore(Integer.parseInt(System.console().readLine()));
+
+            writeQuizToFile();
+        }
     }
 
-    private void askForScore() {
-        System.console().printf("Enter final score: ");
-        quiz.setScore(Integer.parseInt(System.console().readLine()));
+    private void findAnswer() throws IOException {
+        SingleChoiceQuestion underCheckingQuestion = null;
+
+        for (var singleChoiceQuestion : quiz.getSingleChoiceQuestions()) {
+            if (!singleChoiceQuestion.isSolved()) {
+                singleChoiceQuestion.chooseRandomAnswer();
+                underCheckingQuestion = singleChoiceQuestion;
+                break;
+            }
+        }
+
+        if (underCheckingQuestion != null) {
+            fillForm();
+
+            System.console().printf("Enter final score: ");
+            int score = Integer.parseInt(System.console().readLine());
+
+            if (score > quiz.getScore()) {
+                quiz.setScore(score);
+                underCheckingQuestion.getCandidateAnswers().clear();
+            } else if (score < quiz.getScore()) {
+                underCheckingQuestion.getCandidateAnswers().clear();
+                underCheckingQuestion.setCurrentAnswer(underCheckingQuestion.getPreviousAnswer());
+            }
+
+            writeQuizToFile();
+        }
     }
 
     public Quiz getQuiz() {
