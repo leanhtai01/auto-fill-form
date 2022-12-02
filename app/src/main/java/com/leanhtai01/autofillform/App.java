@@ -3,7 +3,7 @@ package com.leanhtai01.autofillform;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import com.leanhtai01.autofillform.domain.Quiz;
+import com.leanhtai01.autofillform.domain.Form;
 
 public class App {
     public static void main(String[] args) throws InterruptedException {
@@ -14,7 +14,7 @@ public class App {
                 .addArguments("user-data-dir=/home/leanhtai01/.config/google-chrome/Default");
         ChromeDriver driver = new ChromeDriver(options);
 
-        Quiz quiz = new Quiz(url, driver);
-        quiz.display();
+        Form form = new Form(url, driver);
+        System.console().printf("%s%n", form.getQuiz());
     }
 }

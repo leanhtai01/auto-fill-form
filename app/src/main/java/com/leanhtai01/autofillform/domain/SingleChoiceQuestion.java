@@ -1,16 +1,17 @@
 package com.leanhtai01.autofillform.domain;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class SingleChoiceQuestion {
+public class SingleChoiceQuestion implements Serializable {
     private String question;
     private List<String> candidateAnswers;
-    private String answer;
+    private String previousAnswer;
+    private String currentAnswer;
 
     public SingleChoiceQuestion(String question, List<String> candidateAnswers) {
         this.question = question;
         this.candidateAnswers = candidateAnswers;
-        this.answer = null;
     }
 
     public String getQuestion() {
@@ -29,11 +30,31 @@ public class SingleChoiceQuestion {
         this.candidateAnswers = candidateAnswers;
     }
 
-    public String getAnswer() {
-        return answer;
+    public String getPreviousAnswer() {
+        return previousAnswer;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
+    public void setPreviousAnswer(String previousAnswer) {
+        this.previousAnswer = previousAnswer;
+    }
+
+    public String getCurrentAnswer() {
+        return currentAnswer;
+    }
+
+    public void setCurrentAnswer(String currentAnswer) {
+        this.currentAnswer = currentAnswer;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(question);
+        for (String answer : candidateAnswers) {
+            builder.append("\n* " + answer);
+        }
+
+        return builder.toString();
     }
 }
