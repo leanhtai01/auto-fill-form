@@ -10,12 +10,14 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 public class Quiz {
     private String url;
     private RemoteWebDriver driver;
+    private List<WebElement> currentQuestionAndAnswersElements;
     private List<SingleChoiceQuestion> singleChoiceQuestions;
 
     public Quiz(String url, RemoteWebDriver driver) throws InterruptedException {
         this.url = url;
         this.driver = driver;
 
+        getCurrentQuizStructure();
         getSingleChoiceQuestionsFromQuiz();
     }
 
@@ -32,15 +34,18 @@ public class Quiz {
         }
     }
 
-    private void getSingleChoiceQuestionsFromQuiz() throws InterruptedException {
+    private void getCurrentQuizStructure() throws InterruptedException {
         driver.get(url);
         Thread.sleep(3000);
 
+        String pathToQuestionAndAnswersElements = "//div[@class=\"office-form-question-content\"]";
+        currentQuestionAndAnswersElements = driver.findElements(By.xpath(pathToQuestionAndAnswersElements));
+    }
+
+    private void getSingleChoiceQuestionsFromQuiz() {
         singleChoiceQuestions = new ArrayList<>();
 
-        String pathToQuestionAndAnswersElements = "//div[@class=\"office-form-question-content\"]";
-        List<WebElement> questionAndAnswersElements = driver.findElements(By.xpath(pathToQuestionAndAnswersElements));
-        for (var questionAndAnswersElement : questionAndAnswersElements) {
+        for (var questionAndAnswersElement : currentQuestionAndAnswersElements) {
             if (isSingleChoiceQuestion(questionAndAnswersElement)) {
                 singleChoiceQuestions.add(getSingleChoiceQuestion(questionAndAnswersElement));
             }
