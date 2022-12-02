@@ -16,5 +16,6 @@ public class App {
 
         Form form = new Form(url, driver);
         System.console().printf("%s%n", form.getQuiz());
+        form.fillForm();
     }
 }

@@ -68,13 +68,13 @@ public class Form {
         }
     }
 
-    private SingleChoiceQuestion getSingleChoiceQuestion(WebElement questionAndAnswerElement) {
+    private SingleChoiceQuestion getSingleChoiceQuestion(WebElement questionAndAnswersElement) {
         String pathToQuestionElement = ".//div[@class=\"question-title-box\"]//span[@class=\"text-format-content\"]";
-        WebElement questionElement = questionAndAnswerElement.findElement(By.xpath(pathToQuestionElement));
+        WebElement questionElement = questionAndAnswersElement.findElement(By.xpath(pathToQuestionElement));
         String question = questionElement.getText();
 
         String pathToAnswerElements = ".//div[@class=\"office-form-question-choice\"]//input[@type=\"radio\"]";
-        List<WebElement> answerElements = questionAndAnswerElement.findElements(By.xpath(pathToAnswerElements));
+        List<WebElement> answerElements = questionAndAnswersElement.findElements(By.xpath(pathToAnswerElements));
         List<String> candidateAnswers = new ArrayList<>();
         for (var answerElement : answerElements) {
             candidateAnswers.add(answerElement.getAttribute("value"));
@@ -88,5 +88,41 @@ public class Form {
         WebElement firstAnswerElement = questionAndAnswerElement.findElement(By.xpath(pathToAnswerElements));
 
         return firstAnswerElement.getAttribute("type").equals("radio");
+    }
+
+    public WebElement findQuestionPositionInForm(String question) {
+        String pathToQuestionElement = ".//div[@class=\"question-title-box\"]//span[@class=\"text-format-content\"]";
+
+        for (var questionAndAnswersElement : questionAndAnswersElements) {
+            WebElement questionElement = questionAndAnswersElement.findElement(By.xpath(pathToQuestionElement));
+
+            if (questionElement.getText().equals(question)) {
+                return questionAndAnswersElement;
+            }
+        }
+
+        return null;
+    }
+
+    public WebElement findAnswerPositionInForm(WebElement questionAndAnswersElement, String answer) {
+        String pathToAnswerElements = ".//div[@class=\"office-form-question-choice\"]//input[@type=\"radio\"]";
+        List<WebElement> answerElements = questionAndAnswersElement
+                .findElements(By.xpath(pathToAnswerElements));
+
+        for (var answerElement : answerElements) {
+            if (answerElement.getAttribute("value").equals(answer)) {
+                return answerElement;
+            }
+        }
+
+        return null;
+    }
+
+    public void fillForm() {
+        for (var singleChoiceQuestion : quiz.getSingleChoiceQuestions()) {
+            var answerElement = findAnswerPositionInForm(findQuestionPositionInForm(singleChoiceQuestion.getQuestion()),
+                    singleChoiceQuestion.getCurrentAnswer());
+            answerElement.click();
+        }
     }
 }
