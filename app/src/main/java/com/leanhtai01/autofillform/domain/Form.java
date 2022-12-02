@@ -19,7 +19,7 @@ public class Form {
     private Quiz quiz;
     private List<WebElement> questionAndAnswersElements;
 
-    public Form(String url, RemoteWebDriver driver) throws InterruptedException {
+    public Form(String url, RemoteWebDriver driver) throws InterruptedException, IOException {
         this.url = url;
         this.driver = driver;
         this.pathToQuizFile = "app/src/main/resources/quiz.dat";
@@ -31,7 +31,16 @@ public class Form {
             readQuizFromFile();
         } catch (Exception e) {
             getQuizFromForm();
+            fillForm();
         }
+
+        askForScore();
+        writeQuizToFile();
+    }
+
+    private void askForScore() {
+        System.console().printf("Enter final score: ");
+        quiz.setScore(Integer.parseInt(System.console().readLine()));
     }
 
     public Quiz getQuiz() {
@@ -118,7 +127,7 @@ public class Form {
         return null;
     }
 
-    public void fillForm() {
+    private void fillForm() {
         for (var singleChoiceQuestion : quiz.getSingleChoiceQuestions()) {
             var answerElement = findAnswerPositionInForm(findQuestionPositionInForm(singleChoiceQuestion.getQuestion()),
                     singleChoiceQuestion.getCurrentAnswer());

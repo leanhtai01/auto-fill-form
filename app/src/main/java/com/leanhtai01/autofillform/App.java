@@ -1,12 +1,14 @@
 package com.leanhtai01.autofillform;
 
+import java.io.IOException;
+
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import com.leanhtai01.autofillform.domain.Form;
 
 public class App {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
         System.setProperty("webdriver.chrome.driver", "/home/leanhtai01/chromedriver_linux64/chromedriver");
 
         String url = "https://forms.office.com/r/sGry7hWTHU";
@@ -16,6 +18,5 @@ public class App {
 
         Form form = new Form(url, driver);
         System.console().printf("%s%n", form.getQuiz());
-        form.fillForm();
     }
 }
