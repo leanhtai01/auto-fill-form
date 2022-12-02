@@ -41,7 +41,7 @@ public class Quiz implements Serializable {
             builder.append(singleChoiceQuestions.get(i) + "\n\n");
         }
 
-        builder.append("Score: " + score + "/" + (singleChoiceQuestions.size() + 1));
+        builder.append("Score: " + score + "/" + singleChoiceQuestions.size());
 
         return builder.toString();
     }
